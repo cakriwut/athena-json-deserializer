@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Athena.Serializer\Athena.Serializer.csproj" />
+    <ProjectReference Include="..\Athena.Deserializer\Athena.Deserializer.csproj" />
   </ItemGroup>
 
 </Project>

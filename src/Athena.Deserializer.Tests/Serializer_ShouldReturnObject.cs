@@ -1,19 +1,19 @@
-namespace Athena.Serializer.Tests;
+namespace Athena.Deserializer.Tests;
 using Xunit;
-using Athena.Serializer;
+using Athena.Deserializer;
 using System.Reflection;
 
 public class Serializer_ShouldReturnObject
 {
     private readonly string AthenaJSONString = @"
     { location = Singapore, 
-      customer = John Doe,
+      customer = John Doe,      
       address = PO Box 123 (Toa Payoh),
       discount = [ 10, 20, 30], 
       items = [ { name = 'Apple', price = 1.20, quantity = 10 }, 
               { name = 'Orange', price = 1.50, quantity = 5 }, 
               { name = 'Banana', price = 1.00, quantity = 20 } ]
-    ";
+    } ";
 
     private readonly string AthenaJSONString2 = @"
     [{ name = 'Apple', price = 1.20, quantity = 10 ,discount = [ 10, 20, 30] , delivery = {location = Singapore, customer = John Doe,address = PO Box 123 (Toa Payoh) }}, 
@@ -34,9 +34,55 @@ public class Serializer_ShouldReturnObject
         var deserialized = TestPrivate.StaticMethod<List<object>>(typeof(AthenaJsonStringExtensions), "GetArray", new object[] { AthenaJSONString2 });
         Assert.Equal(3, deserialized.Count());
     }
+
+    [Fact(DisplayName = "Should return Dictionary Objects")]
+    public void ShouldReturn_DictionaryObjects()
+    {
+        Dictionary<string,object> deserialized = AthenaJSONString.ToJsonObject<Dictionary<string,object>>();
+             
+        Assert.Equal("Singapore", deserialized["location"].ToString());
+        Assert.Equal("John Doe", deserialized["customer"].ToString());
+    }
+
+    [Fact(DisplayName = "Should return Objects")]
+    public void ShouldReturn_Objects()
+    {
+        SchemaJson1 deserialized = AthenaJSONString.ToJsonObject<SchemaJson1>();
+        var expected = new SchemaJson1
+        {
+            Location = "Singapore",
+            Customer = "John Doe",
+            Address = "PO Box 123 (Toa Payoh)"
+        };
+
+
+        Assert.Equal(expected, deserialized);
+    }
+
+    [Fact(DisplayName = "Should return Array")]
+    public void ShouldReturn_Array()
+    {
+        var deserialized = AthenaJSONString.ToJsonObject<SchemaJson2>();
+        int[] expected = new int[] { 10, 20, 30 };
+
+        Assert.Equal(3, deserialized.Discount.Count());
+        Assert.Equal(expected, deserialized.Discount);
+    }
 }
 
 
+public record SchemaJson1
+{
+    public string Location { get; set; }
+    public string Customer { get; set; }
+    public string Address { get; set; }
+}
+
+
+public record SchemaJson2
+{
+    public int[] Discount { get; set; }
+}
 public static class TestPrivate
 {
     public static T StaticMethod<T>(Type classType, string methodName, object[] callParams)
