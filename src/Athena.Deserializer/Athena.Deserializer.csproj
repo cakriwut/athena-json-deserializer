@@ -30,7 +30,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <MinVerTagPrefix>v</MinVerTagPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
