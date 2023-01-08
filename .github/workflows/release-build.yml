@@ -2,8 +2,8 @@ name: Release Build
 
 on:  
   push:
-    tags: 
-    - "v*"    
+#     tags: 
+#     - "v*"    
 
 env:
   # Stop wasting time caching packages
@@ -22,32 +22,53 @@ jobs:
     - name: Check out code from repository
       uses: actions/checkout@v2
 
-    - name: Restore dependencies
-      run:  dotnet restore ./src
-
-    - name: Build
-      run:  |
-        dotnet build --no-restore -c Release ./src
-        dotnet pack -v normal -c Release ./src         
-
-    - uses: "marvinpinto/action-automatic-releases@latest"
-      if: matrix.os == 'ubuntu-latest' 
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"        
-        prerelease: false
-        title: "Release Build"
-        files: |
-          ./src/**/*.nupkg
-          README.md 
-
-    - name: Publish Package to Github
+    - name: Semantic Release
+      id: release
       if: matrix.os == 'ubuntu-latest'
-      uses: actions/upload-artifact@v2
+      uses: cycjimmy/semantic-release-action@v3
       with:
-        name: Packages
-        path: ./src/**/*.nupkg
+        working_directory: ./src/Athena.Deserializer
+        extra_plugins: |
+            @semantic-release/commit-analyzer
+            @semantic-release/release-notes-generator
+            @semantic-release/github
+            @semantic-release/git
+            @semantic-release/exec
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Publish Package to Nuget
-      if: matrix.os == 'ubuntu-latest' 
-      run: |
-        dotnet nuget push **\*.nupkg --api-key ${{secrets.NUGETSECRET}} --source https://api.nuget.org/v3/index.json        
+    - name: Build Project
+      run:  |
+        dotnet clean ./src
+        dotnet restore ./src
+        dotnet build --no-restore -c Release ./src
+
+    - name: Publish Project
+      if: ${{ steps.release.outputs.new_release_version && matrix.os == 'ubuntu-latest'}}
+      run:  |
+        dotnet clean ./src
+        dotnet restore ./src        
+        dotnet pack -v normal -c Release --include-symbol ./src    
+        dotnet nuget push **\*.nupkg --api-key ${{secrets.NUGETSECRET}} --source https://api.nuget.org/v3/index.json     
+
+    # - uses: "marvinpinto/action-automatic-releases@latest"
+    #   if: matrix.os == 'ubuntu-latest' 
+    #   with:
+    #     repo_token: "${{ secrets.GITHUB_TOKEN }}"        
+    #     prerelease: false
+    #     title: "Release Build"
+    #     files: |
+    #       ./src/**/*.nupkg
+    #       README.md 
+
+    # - name: Publish Package to Github
+    #   if: matrix.os == 'ubuntu-latest'
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: Packages
+    #     path: ./src/**/*.nupkg
+
+    # - name: Publish Package to Nuget
+    #   if: matrix.os == 'ubuntu-latest' 
+    #   run: |
+    #     dotnet nuget push **\*.nupkg --api-key ${{secrets.NUGETSECRET}} --source https://api.nuget.org/v3/index.json        
