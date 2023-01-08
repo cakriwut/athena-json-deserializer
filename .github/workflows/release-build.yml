@@ -41,19 +41,19 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
 
-    - name: Build Project
-      run:  |
-        dotnet clean ./src
-        dotnet restore ./src
-        dotnet build --no-restore -c Release ./src
-
-    - name: Publish Project
-      if: ${{ steps.release.outputs.new_release_version && matrix.os == 'ubuntu-latest'}}
-      run:  |
-        dotnet clean ./src
-        dotnet restore ./src        
-        dotnet pack -v normal -c Release --include-symbol ./src    
-        dotnet nuget push **\*.nupkg --api-key ${{secrets.NUGETSECRET}} --source https://api.nuget.org/v3/index.json     
+#    - name: Build Project
+#      run:  |
+#        dotnet clean ./src
+#        dotnet restore ./src
+#        dotnet build --no-restore -c Release ./src
+#
+#    - name: Publish Project
+#      if: ${{ steps.release.outputs.new_release_version && matrix.os == 'ubuntu-latest'}}
+#      run:  |
+#        dotnet clean ./src
+#        dotnet restore ./src        
+#        dotnet pack -v normal -c Release --include-symbol ./src    
+#        dotnet nuget push **\*.nupkg --api-key ${{secrets.NUGETSECRET}} --source https://api.nuget.org/v3/index.json     
 
     # - uses: "marvinpinto/action-automatic-releases@latest"
     #   if: matrix.os == 'ubuntu-latest' 
