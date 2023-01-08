@@ -21,15 +21,19 @@
             "@semantic-release/git",
             {
                 "assets": [
-                    "package.json",
-                    "package-lock.json",
                     "CHANGELOG.md",
-                    "Directory.Build.props"
+                    "src/Athena.Deserializer/Athena.Deserializer.csproj"
                 ],
                 "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
             }
         ],
-       "@semantic-release/github",
+       [ "@semantic-release/github", {
+           "assets" : [
+             {"path" : "**/*.nupkg", "label" : "Nuget packages" },
+             {"path" : "README.md", "label" : "Readme" },
+             {"path" : "CHANGELOG.md", "label" : "Change logs" }
+          ]
+       }]
     ],
     "npmPublish": false,
     "projectPath": "src/Athena.Deserializer/Athena.Deserializer.csproj",
