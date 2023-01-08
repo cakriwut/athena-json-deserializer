@@ -29,8 +29,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: |
-         dotnet build --no-restore -c Release ./src/Athena.Serializer/Athena.Serializer.csproj
-         dotnet pack -v normal -c Release ./src/Athena.Serializer/Athena.Serializer.csproj
+         dotnet build --no-restore -c Release ./src
+         dotnet pack -v normal -c Release ./src
     - name: Test
       run: |
          dotnet test --no-build --verbosity normal ./src/AthenaSerializer.sln
