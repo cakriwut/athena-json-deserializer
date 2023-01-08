@@ -37,7 +37,7 @@
     "publishToGit": true,
     "files" : [
       {
-         "path": ["Directory.Build.props"],
+         "path": ["src/Athena.Deserializer/Athena.Deserializer.csproj"],
          "type": "xml",
          "replacements" : [
            {
