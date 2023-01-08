@@ -18,14 +18,14 @@
         [
             "@semantic-release/exec",
             {
-                "prepareCmd": "../updateVersion.sh '${nextRelease.version}' 'src/Athena.Deserializer/Athena.Deserializer.csproj'"
+                "prepareCmd": "../updateVersion.sh '${nextRelease.version}' 'Athena.Deserializer.csproj'"
             }
         ],
         [
             "@semantic-release/git",
             {
                 "assets": [
-                    "src/Athena.Deserializer/Athena.Deserializer.csproj"
+                    "Athena.Deserializer.csproj"
                 ],
                 "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
             }

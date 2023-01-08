@@ -27,7 +27,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       uses: cycjimmy/semantic-release-action@v3
       with:
-        working_directory: ./Gpanga.Example.SDK
+        working_directory: ./src/Athena.Deserializer
         extra_plugins: |
             @semantic-release/commit-analyzer
             @semantic-release/release-notes-generator
