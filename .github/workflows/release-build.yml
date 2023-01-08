@@ -39,6 +39,7 @@ jobs:
             @droidsolutions-oss/semantic-release-nuget
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
 
     - name: Build Project
       run:  |
