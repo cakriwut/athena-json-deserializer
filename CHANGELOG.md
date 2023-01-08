@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/cakriwut/athena-json-deserializer/compare/v1.0.2...v1.0.3) (2023-01-08)
+
+
+### Bug Fixes
+
+* build assets ([2bfdaca](https://github.com/cakriwut/athena-json-deserializer/commit/2bfdaca43f63270c53e4a45355ed70a98d63bf72))
+
 ## [1.0.2](https://github.com/cakriwut/athena-json-deserializer/compare/v1.0.1...v1.0.2) (2023-01-08)
 
 
