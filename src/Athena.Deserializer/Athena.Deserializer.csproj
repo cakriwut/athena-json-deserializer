@@ -1,9 +1,44 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <PackageId>Athena.Deserializer</PackageId>
+    <Title>Athena JSON Deserializer</Title>
+    <Description>Deserialize JSON having equal sign, returned by AWS Athena SDK</Description>
+    <Authors>Riwut Libinuko</Authors>
+    <Owners>Riwut Libinuko</Owners>
+    <Copyright>Copyright (c) Riwut Libinuko 2023</Copyright>
+    <AssemblyName>Athena.Deserializer</AssemblyName>
+    <PackageTags>JSON;Serializer;Deserializer;Athena</PackageTags>
+    <PackageProjectUrl>https://github.com/cakriwut/athena-json-deserializer</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReleaseNotes>https://github.com/cakriwut/athena-json-deserializer/releases</PackageReleaseNotes>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>false</EmbedUntrackedSources>
+
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    
   </PropertyGroup>
+
+  <PropertyGroup>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../Readme.md" pack="true" PackagePath="." />
+  </ItemGroup>
 
 </Project>
