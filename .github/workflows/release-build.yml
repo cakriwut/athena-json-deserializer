@@ -1,9 +1,9 @@
 name: Release Build
 
-on:  
-  push:
-    tags: 
-    - "v*"    
+# on:  
+#   push:
+#     tags: 
+#     - "v*"    
 
 env:
   # Stop wasting time caching packages
