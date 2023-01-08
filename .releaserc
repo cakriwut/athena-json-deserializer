@@ -14,21 +14,41 @@
     "plugins": [
         "@semantic-release/commit-analyzer",
         "@semantic-release/release-notes-generator",
-        "@semantic-release/github",
-        [
-            "@semantic-release/exec",
-            {
-                "prepareCmd": "../../updateVersion.sh '${nextRelease.version}' './src/Athena.Deserializer/Athena.Deserializer.csproj'"
-            }
-        ],
+        "@semantic-release/changelog",
+        "@droidsolutions-oss/semantic-release-update-file",
+        "@droidsolutions-oss/semantic-release-nuget",
         [
             "@semantic-release/git",
             {
                 "assets": [
-                    "Athena.Deserializer.csproj"
+                    "package.json",
+                    "package-lock.json",
+                    "CHANGELOG.md",
+                    "Directory.Build.props"
                 ],
                 "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
             }
-        ]
+        ],
+       "@semantic-release/github",
+    ],
+    "npmPublish": false,
+    "projectPath": "src/Athena.Deserializer/Athena.Deserializer.csproj",
+    "includeSymbols": true,
+    "publishToGit": true,
+    "files" : [
+      {
+         "path": ["Directory.Build.props"],
+         "type": "xml",
+         "replacements" : [
+           {
+              "key": "VersionPrefix",
+              "value": "${nextRelease.version}"
+            },
+            {
+              "key": "RepositoryCommit",
+              "value": "${CI_COMMIT_SHA}"
+            }
+         ]
+      }
     ]
 }
