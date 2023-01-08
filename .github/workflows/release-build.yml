@@ -39,14 +39,14 @@ jobs:
 
     - name: Build Project
       run:  |
-        dotnet clean
+        dotnet clean ./src
         dotnet restore ./src
         dotnet build --no-restore -c Release ./src
 
     - name: Publish Project
       if: ${{ steps.release.outputs.new_release_version && matrix.os == 'ubuntu-latest'}}
       run:  |
-        dotnet clean
+        dotnet clean ./src
         dotnet restore ./src        
         dotnet pack -v normal -c Release --include-symbol ./src    
         dotnet nuget push **\*.nupkg --api-key ${{secrets.NUGETSECRET}} --source https://api.nuget.org/v3/index.json     
