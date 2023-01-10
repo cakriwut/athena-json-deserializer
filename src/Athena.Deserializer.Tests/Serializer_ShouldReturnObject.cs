@@ -19,7 +19,11 @@ public class Serializer_ShouldReturnObject
     [{ name = 'Apple', price = 1.20, quantity = 10 ,discount = [ 10, 20, 30] , delivery = {location = Singapore, customer = John Doe,address = PO Box 123 (Toa Payoh) }}, 
      { name = 'Orange', price = 1.50, quantity = 5 , discount = [ 10, 20, 30], delivery = {location = Singapore, customer = John Doe,address = PO Box 123 (Toa Payoh) }}, 
      { name = 'Banana', price = 1.00, quantity = 20 , discount = [ 10, 20, 30] , delivery = {location = Singapore, customer = John Doe,address = PO Box 123 (Toa Payoh) }} ]";
-    
+
+    private readonly string AthenaJSONString3 = @"
+    { location= Singapore, name= John Doe, publisher={id=29bdab7b36d0213}}
+    ";
+
     [Fact(DisplayName = "First level contains five fields")]
     public void ShouldReturn_FirstLevel_ContainsFiveFields()
     {
@@ -67,6 +71,14 @@ public class Serializer_ShouldReturnObject
 
         Assert.Equal(3, deserialized.Discount.Count());
         Assert.Equal(expected, deserialized.Discount);
+    }
+
+
+    [Fact(DisplayName = "Should return Nested Object")]
+    public void ShouldReturn_NestedObject()
+    {
+        var deserialized = AthenaJSONString3.ToJsonObject();
+
     }
 }
 

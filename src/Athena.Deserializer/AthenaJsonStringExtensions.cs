@@ -8,7 +8,7 @@ public static class AthenaJsonStringExtensions
 
     public static T ToJsonObject<T>(this string jsonInput)
     {
-        var jsonString = Regex.Replace(jsonInput, @"\t|\n|\r", "");
+        var jsonString = SanitizeString(jsonInput);
 
         var serialized = System.Text.Json.JsonSerializer.Serialize(jsonString.ToJsonObject());
         return System.Text.Json.JsonSerializer.Deserialize<T>(serialized, new System.Text.Json.JsonSerializerOptions
@@ -19,12 +19,12 @@ public static class AthenaJsonStringExtensions
     }
     public static string ToSerializedJson(this string jsonInput)
     {
-        var jsonString = Regex.Replace(jsonInput, @"\t|\n|\r", "");
+        var jsonString = SanitizeString(jsonInput);
         return System.Text.Json.JsonSerializer.Serialize(jsonString.ToJsonObject());
     }
     public static object ToJsonObject(this string jsonInput)
     {
-        var jsonString = Regex.Replace(jsonInput, @"\t|\n|\r", "");
+        var jsonString = Regex.Replace(jsonInput, @"\t|\n|\r", "").Trim();
         if (jsonString.Trim().StartsWith('{'))
         {
             return GetObject(jsonString.Trim());
@@ -38,8 +38,14 @@ public static class AthenaJsonStringExtensions
             return String.Empty;
         }
     }
-    private static Dictionary<string, object> GetObject(string jsonInput)
+
+    private static String SanitizeString(string jsonInput)
     {
+        return Regex.Replace(jsonInput, @"\t|\n|\r", "").Trim();
+    }
+    private static Dictionary<string, object> GetObject(string jsonString)
+    {
+        var jsonInput =SanitizeString(jsonString);
         var result = new Dictionary<string, object>();
 
         var objTree = new Stack<int>();
@@ -51,8 +57,10 @@ public static class AthenaJsonStringExtensions
 
         var jsonValue = String.Empty;
 
-        foreach (var chr in jsonInput)
+        //foreach (var chr in jsonInput)
+        for(int i=0;i < jsonInput.Length; i++)
         {
+            var chr = jsonInput[i];
             if (char.Equals('{', chr))
             {
                 lvl++;
@@ -71,12 +79,23 @@ public static class AthenaJsonStringExtensions
                     {
                         var key = objKey.Trim('\'', '"', ' ');
                         if (objValue.Trim().StartsWith('['))
-                        {
+                        {                            
+
                             var value = GetArray(objValue);
                             result.Add(key, value);
                         }
                         else if (objValue.Trim().StartsWith('{'))
                         {
+                            for (int j = i; j < jsonInput.Length; j++)
+                            {
+                                chr = jsonInput[j];
+                                objValue += chr;
+                                if (char.Equals('}', chr))
+                                {
+                                    i = j;
+                                    break;
+                                }
+                            }
                             var value = GetObject(objValue);
                             result.Add(key, value);
                         }
@@ -101,7 +120,7 @@ public static class AthenaJsonStringExtensions
                 }
             }
 
-            if (char.Equals('}', chr)) // || char.Equals('}', chr))
+            if (char.Equals('}', chr)) 
             {
                 var endLevel = objTree.Pop();
                 if (!objTree.TryPeek(out lvl)) lvl = 0;
@@ -118,8 +137,9 @@ public static class AthenaJsonStringExtensions
         return result;
     }
 
-    private static List<object> GetArray(string jsonInput)
+    private static List<object> GetArray(string jsonString)
     {
+        var jsonInput = SanitizeString(jsonString);
         var result = new List<object>();
 
         var objTree = new Stack<int>();
@@ -129,8 +149,9 @@ public static class AthenaJsonStringExtensions
         var objLvl = 0;
 
 
-        foreach (var chr in jsonInput)
+        for (int i=0;i< jsonInput.Length; i++)
         {
+            var chr = jsonInput[i];
             if (char.Equals('[', chr)) // || char.Equals('{', chr))
             {
                 lvl++;
@@ -143,9 +164,11 @@ public static class AthenaJsonStringExtensions
 
             if (lvl >= 1)
             {
-                if (char.Equals('{', chr)) objLvl++;
-                if (char.Equals('}', chr)) objLvl--;
-                if (objLvl == 0 && (char.Equals(',', chr) || char.Equals(']', chr)))
+
+                if (char.Equals('{', chr) || char.Equals('[', chr) || char.Equals('(', chr)) objLvl++;
+                if (char.Equals('}', chr) || char.Equals(']', chr) || char.Equals(')', chr)) objLvl--;
+
+                if (objLvl <= 0 && (char.Equals(',', chr) || char.Equals(']', chr)))
                 {
                     if (objValue.Trim().StartsWith('{'))
                     {
