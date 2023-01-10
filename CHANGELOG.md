@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/cakriwut/athena-json-deserializer/compare/v1.0.3...v1.0.4) (2023-01-10)
+
+
+### Bug Fixes
+
+* [#6](https://github.com/cakriwut/athena-json-deserializer/issues/6) missing nested object ([1f9fed0](https://github.com/cakriwut/athena-json-deserializer/commit/1f9fed0b985bc6b11543204e1f3bc77db7d2468a))
+
 ## [1.0.3](https://github.com/cakriwut/athena-json-deserializer/compare/v1.0.2...v1.0.3) (2023-01-08)
 
 
