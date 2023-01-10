@@ -21,7 +21,7 @@ public class Serializer_ShouldReturnObject
      { name = 'Banana', price = 1.00, quantity = 20 , discount = [ 10, 20, 30] , delivery = {location = Singapore, customer = John Doe,address = PO Box 123 (Toa Payoh) }} ]";
 
     private readonly string AthenaJSONString3 = @"
-    {bundle=com.funreality.software.nativefindmyiphone.lite, name=Find iPhone Android Devices xfi Locator Lite, publisher={id=e0fce456fe954e89829bdab7b36d0213}}
+    { location= Singapore, name= John Doe, publisher={id=29bdab7b36d0213}}
     ";
 
     [Fact(DisplayName = "First level contains five fields")]
